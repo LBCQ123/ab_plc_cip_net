@@ -23,7 +23,8 @@ cip_error_code_e ab_cip_read_int64(int fd, const char *address, int64 *val);
 cip_error_code_e ab_cip_read_uint64(int fd, const char *address, uint64 *val);
 cip_error_code_e ab_cip_read_float(int fd, const char *address, float *val);
 cip_error_code_e ab_cip_read_double(int fd, const char *address, double *val);
-cip_error_code_e ab_cip_read_string(int fd, const char *address, int *length, char **val); // need free val
+//length表示数组的元素个数，如果只有一条字符串就写1
+cip_error_code_e ab_cip_read_string(int fd, const char *address, int *length, char *val); // need free val
 
 // write
 cip_error_code_e ab_cip_write_bool(int fd, const char *address, bool val);
@@ -35,6 +36,8 @@ cip_error_code_e ab_cip_write_int64(int fd, const char *address, int64 val);
 cip_error_code_e ab_cip_write_uint64(int fd, const char *address, uint64 val);
 cip_error_code_e ab_cip_write_float(int fd, const char *address, float val);
 cip_error_code_e ab_cip_write_double(int fd, const char *address, double val);
-cip_error_code_e ab_cip_write_string(int fd, const char *address, int length, const char *val);
+cip_error_code_e ab_cip_write_string(int fd, const char* address, int length, const char* val);
+//请勿调用
+cip_error_code_e ab_cip_write_string_t(int fd, const char *address, int length, const char *val);
 
 #endif //__H_AB_CIP_H__

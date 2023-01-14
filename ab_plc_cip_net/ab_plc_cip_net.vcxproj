@@ -158,19 +158,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ab_cip.c" />
-    <ClCompile Include="ab_cip_comm.c" />
     <ClCompile Include="ab_cip_helper.c" />
-    <ClCompile Include="dynstr.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="socket.c" />
     <ClCompile Include="utill.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ab_cip.h" />
-    <ClInclude Include="ab_cip_comm.h" />
     <ClInclude Include="ab_cip_helper.h" />
     <ClInclude Include="ab_cip_private.h" />
-    <ClInclude Include="dynstr.h" />
     <ClInclude Include="socket.h" />
     <ClInclude Include="typedef.h" />
     <ClInclude Include="utill.h" />
