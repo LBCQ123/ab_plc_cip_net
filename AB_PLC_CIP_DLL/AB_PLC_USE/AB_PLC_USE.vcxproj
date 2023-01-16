@@ -140,7 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AbPlcUse.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="AB_PLC_USE.cpp" />
   </ItemGroup>
   <ItemGroup>
