@@ -18,7 +18,7 @@
     <ClCompile Include="AB_PLC_USE.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="AbPlcUse.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
