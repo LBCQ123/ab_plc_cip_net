@@ -20,6 +20,8 @@ bool AbPlcUse::connect(char* ip_addr, int port, int slot)
 	bool ret = false;
 	int mfd = -1;
 
+	disConnect();
+
 	mutexLocal local(&MyMutex);
 	ret = ab_cip_connect(ip_addr, port, slot, &mfd);
 	if (mfd != -1)

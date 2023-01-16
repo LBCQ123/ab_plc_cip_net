@@ -9,6 +9,9 @@
 #pragma warning(disable : 4996)
 #include <mutex>
 
+
+//加锁封装，用于多线程场景
+
 #pragma comment(lib,"AB_PLC_CIP.lib")
 
 class AbPlcUse
