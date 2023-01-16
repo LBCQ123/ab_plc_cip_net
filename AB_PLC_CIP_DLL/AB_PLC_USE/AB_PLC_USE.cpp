@@ -39,9 +39,8 @@ int main()
 			printf("Read\t %s \tbool:\t %d, \tret: %d\n", address, val, ret);
 		}
 		//开始断网
-		//printf("pause\n");
-		//Sleep(3000);
-		
+		//Sleep(8000);
+
 		{//read&write short test
 			short val = 3;
 			strcpy(address, "Test6.E[1]");
@@ -64,8 +63,8 @@ int main()
 
 		//恢复网络
 		//Sleep(8000);
-		//user.disConnect();
-		//ret = user.connect(plc_ip, plc_port, 0);
+		/*user.disConnect();
+		ret = user.connect(plc_ip, plc_port, 0);*/
 
 		{//read&write int test
 			int val = 3;
