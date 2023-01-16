@@ -1,30 +1,26 @@
+﻿// AB_PLC_USE.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+//
+
+#include <iostream>
+#include "ab_cip.h"
 #ifdef _WIN32
 #include <WinSock2.h>
 #endif
-#include <stdio.h>
 #include <stdlib.h>
 #pragma warning(disable : 4996)
 
-#define GET_RESULT(ret)    \
-	{                      \
-		if (ret != 0)      \
-			faild_count++; \
-	}
+#pragma comment(lib,"AB_PLC_CIP.lib")
 
-#include "ab_cip.h"
-
-int main(int argc, char** argv)
+int main()
 {
-	char* plc_ip = "192.168.11.110";	int plc_port = 44818;
-	if (argc > 1)
-	{
-		plc_ip = argv[1];
-		plc_port = atoi(argv[2]);
-	}
+    //std::cout << "Hello World!\n";
+
+	char plc_ip[] = "192.168.11.110";	int plc_port = 44818;
+
 
 	int fd = -1;
 	int slot = 0;
-	printf("��ʼͨѶ\n");
+	printf("开始通讯\n");
 	bool ret = ab_cip_connect(plc_ip, plc_port, 0, &fd);
 
 	if (ret && fd > 0)
@@ -54,7 +50,7 @@ int main(int argc, char** argv)
 			ret = ab_cip_read_bool(fd, address, &val);
 			printf("Read\t %s \tbool:\t %d, \tret: %d\n", address, val, ret);
 		}
-		//��ʼ����
+		//开始断网
 		//Sleep(8000);
 
 		{//read&write short test
@@ -77,7 +73,7 @@ int main(int argc, char** argv)
 
 		}
 
-		//�ָ�����
+		//恢复网络
 		//Sleep(8000);
 		ab_cip_connect(plc_ip, plc_port, 0, &fd);
 
@@ -111,7 +107,7 @@ int main(int argc, char** argv)
 
 
 			strcpy(tab, "");
-			ret = ab_cip_read_string(fd, address, &length, &tab);
+			ret = ab_cip_read_string(fd, address, &length, tab);
 			printf("Read\t %s \tstring:%s, ret = %d\n", address, tab, ret);
 
 			strcpy(tab, "hahahha");
@@ -120,7 +116,7 @@ int main(int argc, char** argv)
 
 			length = 1;
 			strcpy(tab, "");
-			ret = ab_cip_read_string(fd, address, &length, &tab);
+			ret = ab_cip_read_string(fd, address, &length, tab);
 			printf("Read\t %s \tstring:%s, ret = %d\n", address, tab, ret);
 
 
@@ -129,8 +125,20 @@ int main(int argc, char** argv)
 		ab_cip_disconnect(fd);
 		//system("pause");
 	}
+	else
+	{
+		printf("通讯失败");
+	}
 
-//#ifdef _WIN32
-//	WSACleanup();
-//#endif
 }
+
+// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
+// 调试程序: F5 或调试 >“开始调试”菜单
+
+// 入门使用技巧: 
+//   1. 使用解决方案资源管理器窗口添加/管理文件
+//   2. 使用团队资源管理器窗口连接到源代码管理
+//   3. 使用输出窗口查看生成输出和其他消息
+//   4. 使用错误列表窗口查看错误
+//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
+//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
