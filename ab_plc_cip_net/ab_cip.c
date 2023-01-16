@@ -19,8 +19,8 @@
 #include <arpa/inet.h>
 #endif
 
-int port = 102;
-char ip_address[64] = {0};
+//int port = 102;
+//char ip_address[64] = {0};
 
 bool ab_cip_connect(char *ip_addr, int port, int slot, int *fd)
 {
@@ -62,7 +62,7 @@ cip_error_code_e ab_cip_read_bool(int fd, const char *address, bool *val)
 	}
 	else
 	{
-		return 99;
+		return CIP_ERROR_CODE_UNKOWN;
 	}
 	return ret;
 }
@@ -80,7 +80,7 @@ cip_error_code_e ab_cip_read_short(int fd, const char *address, short *val)
 	}
 	else
 	{
-		return 99;
+		return CIP_ERROR_CODE_UNKOWN;
 	}
 	return ret;
 }
@@ -112,7 +112,7 @@ cip_error_code_e ab_cip_read_int32(int fd, const char *address, int32 *val)
 	}
 	else
 	{
-		return 99;
+		return CIP_ERROR_CODE_UNKOWN;
 	}
 	return ret;
 }
@@ -216,7 +216,7 @@ cip_error_code_e ab_cip_read_string(int fd, const char *address, int *length, ch
 		}
 		else
 		{
-			ret = 99;
+			ret = CIP_ERROR_CODE_UNKOWN;
 		}
 	}
 	return ret;
@@ -386,7 +386,7 @@ cip_error_code_e ab_cip_write_double(int fd, const char *address, double val)
 
 cip_error_code_e ab_cip_write_string(int fd, const char* address, int length, const char* val)
 {
-	int ret = 0;
+	cip_error_code_e ret = CIP_ERROR_CODE_FAILED;
 	char newAddr[100] = {0};
 	int lenth = strlen(val);
 	sprintf(newAddr, "%s.LEN", address);
