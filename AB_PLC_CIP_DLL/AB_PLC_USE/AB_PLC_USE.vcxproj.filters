@@ -18,12 +18,18 @@
     <ClCompile Include="AB_PLC_USE.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="AbPlcUse.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ab_cip.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="typedef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AbPlcUse.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

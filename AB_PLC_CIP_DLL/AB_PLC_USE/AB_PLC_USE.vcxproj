@@ -140,9 +140,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbPlcUse.cpp" />
     <ClCompile Include="AB_PLC_USE.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbPlcUse.h" />
     <ClInclude Include="ab_cip.h" />
     <ClInclude Include="typedef.h" />
   </ItemGroup>
