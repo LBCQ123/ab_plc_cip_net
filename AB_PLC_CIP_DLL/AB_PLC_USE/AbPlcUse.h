@@ -19,10 +19,10 @@ public:
 	bool connect(char* ip_addr, int port, int slot);
 	bool disConnect();
 	//读取
+	cip_error_code_e read_bool(const char* address, bool* val);
 	cip_error_code_e read_short(const char* address, short* val);
 	cip_error_code_e read_int32(const char* address, int32* val);
-	cip_error_code_e read_bool(const char* address, bool* val);
-	//length表示数组的元素个数，如果只有一条字符串就写1
+	//length返回读取字符串长度
 	cip_error_code_e read_string(const char* address, int* length, char* val);
 	//写入
 	cip_error_code_e write_bool(const char* address, bool val);
