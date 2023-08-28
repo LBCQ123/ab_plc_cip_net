@@ -9,135 +9,29 @@ int main()
     //std::cout << "Hello World!\n";
 
 	char plc_ip[] = "192.168.11.110";	int plc_port = 44818;
-
+	char plc_ip2[] = "192.168.11.110";	int plc_port2 = 44818;
 
 	int slot = 0;
 	printf("开始通讯\n");
 	AbPlcUse user;
 	bool ret = user.connect(plc_ip, plc_port, 0);
 
-	if (ret)
-	{
-		char address[50] = { 0 };
-		int i = 0;
-		{//read&write bool test
-			bool val = true;
-			strcpy(address, "Test");
-			ret = user.write_bool(address, val);
-			printf("Write\t %s \tbool:\t %d, \tret: %d\n", address, val, ret);
-
-			val = false;
-			ret = user.read_bool(address, &val);
-			printf("Read\t %s \tbool:\t %d, \tret: %d\n", address, val, ret);
-
-			val = false;
-			ret = user.write_bool(address, val);
-			printf("Write\t %s \tbool:\t %d, \tret: %d\n", address, val, ret);
-
-			val = true;
-			ret = user.read_bool(address, &val);
-			printf("Read\t %s \tbool:\t %d, \tret: %d\n", address, val, ret);
-		}
-		//开始断网
-		//Sleep(8000);
-
-		{//read&write short test
-			short val = 3;
-			strcpy(address, "Test6.E[1]");
-			ret = user.write_short(address, val);
-			printf("Write\t %s \tshort:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 0;
-			ret = user.read_short(address, &val);
-			printf("Read\t %s \tshort:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 55;
-			ret = user.write_short(address, val);
-			printf("Write\t %s \tshort:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 0;
-			ret = user.read_short(address, &val);
-			printf("Read\t %s \tshort:\t %d, \tret: %d\n", address, val, ret);
-
-		}
-
-		//恢复网络
-		//Sleep(8000);
-		/*user.disConnect();
-		ret = user.connect(plc_ip, plc_port, 0);*/
-
-		{//read&write int test
-			int val = 3;
-			strcpy(address, "Test3");
-			ret = user.write_int32(address, val);
-			printf("Write\t %s \tint32:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 0;
-			ret = user.read_int32(address, &val);
-			printf("Read\t %s \tint32:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 4567;
-			ret = user.write_int32(address, val);
-			printf("Write\t %s \tint32:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 0;
-			ret = user.read_int32(address, &val);
-			printf("Read\t %s \tint32:\t %d, \tret: %d\n", address, val, ret);
-		}
+	AbPlcUse user2;
+	bool ret2 = user2.connect(plc_ip2, plc_port2, 0);
 
 
-		{//read&write string test
-			char tab[100];
-			strcpy(address, "Test5");
-			int length = 1;
-
-			strcpy(tab, "hello");
-			ret = user.write_string("Test5", strlen(tab), tab);
-			printf("Write\t %s \tstring:%s, ret = %d\n", address, tab, ret);
+	//测试
+	char addr[30] = "E.5";
+	short val = 3;
+	ret = user.read_short(addr, &val);
+	printf("Read\t %s \tshort:\t %d, \tret: %d\n", addr, val, ret);
 
 
-			strcpy(tab, "");
-			ret = user.read_string(address, &length, tab);
-			printf("Read\t %s \tstring:%s, ret = %d\n", address, tab, ret);
-
-			strcpy(tab, "hahahha");
-			ret = user.write_string("Test5", strlen(tab), tab);
-			printf("Write\t %s \tstring:%s, ret = %d\n", address, tab, ret);
-
-			length = 1;
-			strcpy(tab, "");
-			ret = user.read_string(address, &length, tab);
-			printf("Read\t %s \tstring:%s, ret = %d\n", address, tab, ret);
+	//测试2
+	ret = user2.read_short(addr, &val);
+	printf("Read2\t %s \tshort:\t %d, \tret: %d\n", addr, val, ret);
 
 
-		}
-
-		{//read&write int test
-			int val = 3;
-			strcpy(address, "Test3");
-			ret = user.write_int32(address, val);
-			printf("Write\t %s \tint32:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 0;
-			ret = user.read_int32(address, &val);
-			printf("Read\t %s \tint32:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 4567;
-			ret = user.write_int32(address, val);
-			printf("Write\t %s \tint32:\t %d, \tret: %d\n", address, val, ret);
-
-			val = 0;
-			ret = user.read_int32(address, &val);
-			printf("Read\t %s \tint32:\t %d, \tret: %d\n", address, val, ret);
-		}
-
-		user.disConnect();
-		//system("pause");
-	}
-	else
-	{
-		printf("通讯失败");
-	}
 
 }
 

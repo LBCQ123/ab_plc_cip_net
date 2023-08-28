@@ -4,21 +4,22 @@
 #include "ab_cip_helper.h"
 #include "socket.h"
 
+#pragma warning(disable : 4996)
+
 extern uint32 g_session;
 extern byte g_plc_slot;
 extern byte g_registered_command[28];
 
 // 从地址构造核心报文
-byte_array_info build_read_core_command(const char *address, int length)
+byte_array_info build_read_core_command(const char* address, int length)
 {
-
 	int len = 0;
 	int addrCount = 0;
 	char orgAddr[100];
 	strcpy(orgAddr, address);
 
 	//保存数组访问结果
-	char arraySave[2] = {0};
+	char arraySave[2] = { 0 };
 	//处理数组访问
 	{
 		char* startpoi = strstr(orgAddr, "[");
@@ -78,10 +79,10 @@ byte_array_info build_read_core_command(const char *address, int length)
 	}
 
 	//再次处理数组
-	if(arraySave[0] == 0x28)
+	if (arraySave[0] == 0x28)
 	{
 		newAddr[newAddrP] = arraySave[0];
-		newAddr[newAddrP+1] = arraySave[1];
+		newAddr[newAddrP + 1] = arraySave[1];
 		newAddrP += 2;
 	}
 
@@ -95,14 +96,14 @@ byte_array_info build_read_core_command(const char *address, int length)
 	memcpy(temp_address, newAddr, addr_length);
 
 	const ushort command_len = 9 + 26 + (ushort)addr_adjust_length + 1 + 22;
-	byte *command = (byte *)malloc(command_len);
+	byte* command = (byte*)malloc(command_len);
 	memset(command, 0, command_len);
 
 	command[0] = 0x6F; // 命令
 	command[2] = (byte)((command_len - 24) % 256);
 	command[3] = (byte)((command_len - 24) / 256); // 长度
 
-	char temp_session[4] = {0};
+	char temp_session[4] = { 0 };
 	uint2bytes(g_session, temp_session);
 	command[4] = temp_session[0];
 	command[5] = temp_session[1];
@@ -149,7 +150,10 @@ byte_array_info build_read_core_command(const char *address, int length)
 	command[8 + 24 + 26 + addr_adjust_length] = 0x01;
 	command[9 + 24 + 26 + addr_adjust_length] = g_plc_slot;
 
-	byte_array_info ret = {0};
+	//释放内存
+	free(temp_address);
+
+	byte_array_info ret = { 0 };
 	ret.data = command;
 	ret.length = command_len;
 	return ret;
@@ -189,11 +193,11 @@ byte_array_info build_write_core_command(const char* address, ushort typeCode, i
 	}
 
 	//处理结构体访问
-	char newAddr[100] = {0};
+	char newAddr[100] = { 0 };
 	int startP = 0;
 	char* point = orgAddr;
 	int newAddrP = 0;
-	for (int p = 0;p<100;p++)
+	for (int p = 0; p < 100; p++)
 	{
 		if (orgAddr[p] == '.')
 		{
@@ -241,19 +245,19 @@ byte_array_info build_write_core_command(const char* address, ushort typeCode, i
 	if (addr_adjust_length % 2 == 1)
 		addr_adjust_length += 1;
 
-	char *temp_address = (char *)malloc(addr_adjust_length);
+	char* temp_address = (char*)malloc(addr_adjust_length);
 	memset(temp_address, 0, addr_adjust_length);
 	memcpy(temp_address, newAddr, addr_length);
 
 	const ushort command_len = 6 + 26 + (ushort)addr_adjust_length + val_len + 4 + 24;
-	byte *command = (byte *)malloc(command_len);
+	byte* command = (byte*)malloc(command_len);
 	memset(command, 0, command_len);
 
 	command[0] = 0x6F; // 命令
 	command[2] = (byte)((command_len - 24) % 256);
 	command[3] = (byte)((command_len - 24) / 256); // 长度
 
-	char temp_session[4] = {0};
+	char temp_session[4] = { 0 };
 	uint2bytes(g_session, temp_session);
 	command[4] = temp_session[0];
 	command[5] = temp_session[1];
@@ -290,7 +294,7 @@ byte_array_info build_write_core_command(const char* address, ushort typeCode, i
 	command[25 + 24] = (byte)((6 + val_len + addr_adjust_length) / 256);
 
 	command[0 + 26 + 24] = 0x4D; // 写数据
-	command[1 + 26 + 24] = (byte)((addr_adjust_length ) / 2);
+	command[1 + 26 + 24] = (byte)((addr_adjust_length) / 2);
 	//command[2 + 26 + 24] = 0x91;
 	//command[3 + 26 + 24] = (byte)addr_length;
 	memcpy(command + 2 + 26 + 24, temp_address, addr_adjust_length);
@@ -309,7 +313,11 @@ byte_array_info build_write_core_command(const char* address, ushort typeCode, i
 	if (value.data != NULL)
 		free(value.data);
 
-	byte_array_info ret = {0};
+	//释放内存
+	free(temp_address);
+
+
+	byte_array_info ret = { 0 };
 	ret.data = command;
 	ret.length = command_len;
 	return ret;
@@ -402,7 +410,7 @@ byte_array_info build_write_core_command(const char* address, ushort typeCode, i
 
 
 
-cip_error_code_e cip_analysis_read_byte(byte_array_info response, byte_array_info *ret)
+cip_error_code_e cip_analysis_read_byte(byte_array_info response, byte_array_info* ret)
 {
 	cip_error_code_e ret_code = CIP_ERROR_CODE_OK;
 	if (response.length == 0)
@@ -416,7 +424,7 @@ cip_error_code_e cip_analysis_read_byte(byte_array_info response, byte_array_inf
 		if (data_length > 6)
 		{
 			temp_length = data_length - 6;
-			ret->data = (byte *)malloc(temp_length);
+			ret->data = (byte*)malloc(temp_length);
 			memset(ret->data, 0, temp_length);
 			memcpy(ret->data, response.data + 46, temp_length);
 			ret->length = temp_length;
@@ -439,7 +447,7 @@ cip_error_code_e cip_analysis_write_byte(byte_array_info response)
 }
 
 //////////////////////////////////////////////////////////////////////////
-cip_error_code_e read_value(int fd, const char *address, int length, byte_array_info *out_bytes)
+cip_error_code_e read_value(int fd, const char* address, int length, byte_array_info* out_bytes)
 {
 	cip_error_code_e ret = CIP_ERROR_CODE_UNKOWN;
 	byte_array_info core_cmd = build_read_core_command(address, length);
@@ -449,9 +457,9 @@ cip_error_code_e read_value(int fd, const char *address, int length, byte_array_
 		int real_sends = socket_send_data(fd, core_cmd.data, need_send);
 		if (real_sends == need_send)
 		{
-			byte temp[BUFFER_SIZE] = {0};
+			byte temp[BUFFER_SIZE] = { 0 };
 			memset(temp, 0, BUFFER_SIZE);
-			byte_array_info response = {0};
+			byte_array_info response = { 0 };
 			response.data = temp;
 			response.length = BUFFER_SIZE;
 
@@ -463,7 +471,7 @@ cip_error_code_e read_value(int fd, const char *address, int length, byte_array_
 	return ret;
 }
 
-cip_error_code_e write_value(int fd, const char *address, int length, ushort type_code, byte_array_info in_bytes)
+cip_error_code_e write_value(int fd, const char* address, int length, ushort type_code, byte_array_info in_bytes)
 {
 	cip_error_code_e ret = CIP_ERROR_CODE_UNKOWN;
 	byte_array_info core_cmd = build_write_core_command(address, type_code, length, in_bytes);
@@ -473,9 +481,9 @@ cip_error_code_e write_value(int fd, const char *address, int length, ushort typ
 		int real_sends = socket_send_data(fd, core_cmd.data, need_send);
 		if (real_sends == need_send)
 		{
-			byte temp[BUFFER_SIZE] = {0};
+			byte temp[BUFFER_SIZE] = { 0 };
 			memset(temp, 0, BUFFER_SIZE);
-			byte_array_info response = {0};
+			byte_array_info response = { 0 };
 			response.data = temp;
 			response.length = BUFFER_SIZE;
 
@@ -493,7 +501,7 @@ bool initialization_on_connect(int fd)
 	g_session = 0;
 
 	// First handshake -> send regiseter command
-	byte_array_info temp = {0};
+	byte_array_info temp = { 0 };
 	const byte m_registered_command[] =
 	{
 		0x65, 0x00,										// 注册请求
@@ -506,7 +514,7 @@ bool initialization_on_connect(int fd)
 		0x00, 0x00										// 选项标记（0x0000
 	};
 	int command_len = sizeof(m_registered_command);
-	temp.data = (byte *)malloc(command_len);
+	temp.data = (byte*)malloc(command_len);
 	for (int i = 0; i < 28; i++)
 	{
 		temp.data[i] = (char)m_registered_command[i];
@@ -523,7 +531,7 @@ bool initialization_on_connect(int fd)
 	return is_ok;
 }
 
-bool cip_read_response(int fd, byte_array_info *response)
+bool cip_read_response(int fd, byte_array_info* response)
 {
 	bool is_ok = false;
 	int nread = 0;
@@ -532,7 +540,7 @@ bool cip_read_response(int fd, byte_array_info *response)
 	if (fd < 0)
 		return -1;
 
-	byte *content = NULL;
+	byte* content = NULL;
 	byte head[HEAD_SIZE];
 	memset(head, 0, HEAD_SIZE);
 	int recv_size = socket_recv_data_one_loop(fd, head, HEAD_SIZE);
@@ -541,14 +549,14 @@ bool cip_read_response(int fd, byte_array_info *response)
 		content_size = bytes2ushort(head + 2);
 		if (content_size > 0)
 		{
-			content = (byte *)malloc(content_size);
+			content = (byte*)malloc(content_size);
 			memset(content, 0, content_size);
 		}
 		recv_size = socket_recv_data(fd, content, content_size);
 		if (recv_size == content_size)
 		{
 			response->length = HEAD_SIZE + content_size;
-			response->data = (byte *)malloc(response->length);
+			response->data = (byte*)malloc(response->length);
 			memset(response->data, 0, response->length);
 			memcpy(response->data, head, HEAD_SIZE);
 			memcpy(response->data + HEAD_SIZE, content, content_size);
@@ -561,14 +569,14 @@ bool cip_read_response(int fd, byte_array_info *response)
 	return is_ok;
 }
 
-bool read_data_from_server(int fd, byte_array_info send, int *session)
+bool read_data_from_server(int fd, byte_array_info send, int* session)
 {
 	bool is_ok = false;
 	int need_send = send.length;
 	int real_sends = socket_send_data(fd, send.data, need_send);
 	if (real_sends == need_send)
 	{
-		byte_array_info response = {0};
+		byte_array_info response = { 0 };
 		is_ok = cip_read_response(fd, &response);
 		if (is_ok)
 		{

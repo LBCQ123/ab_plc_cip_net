@@ -69,6 +69,10 @@ int main(int argc, char** argv)
 
 				val = 0;
 				ret = ab_cip_read_short(fd, address, &val);
+				//读到的byte不是abc就是def
+				byte abc = ((char*)&ret)[0];
+				byte def = ((char*)&ret)[1];
+
 				//printf("Read\t %s \tshort:\t %d, \tret: %d\n", address, val, ret);
 				GET_RESULT(ret);
 

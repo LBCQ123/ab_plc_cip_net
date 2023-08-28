@@ -150,6 +150,9 @@ byte_array_info build_read_core_command(const char *address, int length)
 	command[8 + 24 + 26 + addr_adjust_length] = 0x01;
 	command[9 + 24 + 26 + addr_adjust_length] = g_plc_slot;
 
+	//释放内存
+	free(temp_address);
+
 	byte_array_info ret = {0};
 	ret.data = command;
 	ret.length = command_len;
@@ -309,6 +312,10 @@ byte_array_info build_write_core_command(const char* address, ushort typeCode, i
 
 	if (value.data != NULL)
 		free(value.data);
+
+	//释放内存
+	free(temp_address);
+
 
 	byte_array_info ret = {0};
 	ret.data = command;
