@@ -464,7 +464,11 @@ cip_error_code_e read_value(int fd, const char *address, int length, byte_array_
 			response.length = BUFFER_SIZE;
 
 			if (cip_read_response(fd, &response))
+			{
 				ret = cip_analysis_read_byte(response, out_bytes);
+				free(response.data);
+			}
+				
 		}
 		free(core_cmd.data);
 	}
